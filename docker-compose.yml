@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: papometro_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     papometro
+      POSTGRES_PASSWORD: papometro
+      POSTGRES_DB:       papometro_db
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U papometro -d papometro_db']
+      interval: 10s
+      timeout:  5s
+      retries:  5
+
+volumes:
+  postgres_data:

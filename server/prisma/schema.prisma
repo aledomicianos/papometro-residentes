@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Resident {
+  id        String    @id @default(cuid())
+  label     String
+  name      String
+  year      Int
+  position  Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  surgeries Surgery[]
+  patients  Patient[]
+
+  @@map("residents")
+}
+
+model Surgery {
+  id         String   @id @default(cuid())
+  type       String
+  patient    String
+  date       DateTime
+  residentId String
+  createdAt  DateTime @default(now())
+
+  resident Resident @relation(fields: [residentId], references: [id], onDelete: Cascade)
+
+  @@index([residentId])
+  @@index([type])
+  @@map("surgeries")
+}
+
+model Patient {
+  id          Int      @id @default(autoincrement())
+  name        String
+  age         Int
+  prontuario  String   @unique
+  residentId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  resident Resident @relation(fields: [residentId], references: [id], onDelete: Restrict)
+
+  @@index([residentId])
+  @@map("patients")
+}
