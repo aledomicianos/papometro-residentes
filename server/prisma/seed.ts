@@ -5,20 +5,32 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Seeding database…');
 
-  // Clear tables in dependency order
   await prisma.surgery.deleteMany();
   await prisma.patient.deleteMany();
   await prisma.resident.deleteMany();
+  await prisma.requiredTask.deleteMany();
+
+  // Required Tasks
+  await Promise.all([
+    // R1
+    prisma.requiredTask.create({ data: { name: 'Sutura simples',       level: 1 } }),
+    prisma.requiredTask.create({ data: { name: 'Drenagem de abscesso', level: 1 } }),
+    prisma.requiredTask.create({ data: { name: 'Biópsia',              level: 1 } }),
+    prisma.requiredTask.create({ data: { name: 'Exodontia complexa',   level: 1 } }),
+    // R2
+    prisma.requiredTask.create({ data: { name: 'Redução de fratura de mandíbula', level: 2 } }),
+    prisma.requiredTask.create({ data: { name: 'Cirurgia ortognática',            level: 2 } }),
+    prisma.requiredTask.create({ data: { name: 'Enxerto ósseo',                  level: 2 } }),
+    prisma.requiredTask.create({ data: { name: 'Implante dentário',              level: 2 } }),
+  ]);
 
   // Residents
-  const residents = await Promise.all([
+  const [r1a, r1b, r2a, r2b] = await Promise.all([
     prisma.resident.create({ data: { label: 'R1-1', name: 'Dra. Ana Souza',      year: 1, position: 1 } }),
     prisma.resident.create({ data: { label: 'R1-2', name: 'Dr. Carlos Lima',     year: 1, position: 2 } }),
     prisma.resident.create({ data: { label: 'R2-1', name: 'Dr. João Mendes',     year: 2, position: 1 } }),
     prisma.resident.create({ data: { label: 'R2-2', name: 'Dra. Maria Ferreira', year: 2, position: 2 } }),
   ]);
-
-  const [r1a, r1b, r2a, r2b] = residents;
 
   // Patients
   await Promise.all([
@@ -40,7 +52,7 @@ async function main() {
     prisma.surgery.create({ data: { type: 'Drenagem de abscesso',             patient: 'Paciente F', date: new Date('2025-03-12'), residentId: r1a.id } }),
   ]);
 
-  console.log(`✅ Seeded: ${residents.length} residentes, 6 pacientes, 6 cirurgias`);
+  console.log('✅ Seed concluído!');
 }
 
 main()

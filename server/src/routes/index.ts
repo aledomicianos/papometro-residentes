@@ -1,25 +1,33 @@
 import { Router } from 'express';
-import { residentController } from '../controllers/residentController';
-import { surgeryController }  from '../controllers/surgeryController';
-import { patientController }  from '../controllers/patientController';
+import { residentController }     from '../controllers/residentController';
+import { surgeryController }      from '../controllers/surgeryController';
+import { patientController }      from '../controllers/patientController';
+import { requiredTaskController } from '../controllers/requiredTaskController';
 
 const router = Router();
 
 // Residents
-router.get   ('/residents',     residentController.list);
-router.post  ('/residents',     residentController.create);
-router.put   ('/residents/:id', residentController.update);
-router.delete('/residents/:id', residentController.remove);
+router.get   ('/residents',          residentController.list);
+router.post  ('/residents',          residentController.create);
+router.put   ('/residents/:id',      residentController.update);
+router.delete('/residents/:id',      residentController.remove);
 
 // Surgeries
-router.get   ('/surgeries',     surgeryController.list);
-router.post  ('/surgeries',     surgeryController.create);
-router.delete('/surgeries/:id', surgeryController.remove);
+router.get   ('/surgeries',          surgeryController.list);
+router.post  ('/surgeries',          surgeryController.create);
+router.put   ('/surgeries/:id',      surgeryController.update);
+router.delete('/surgeries/:id',      surgeryController.remove);
 
 // Patients
-router.get   ('/patients',      patientController.list);
-router.post  ('/patients',      patientController.create);
-router.put   ('/patients/:id',  patientController.update);
-router.delete('/patients/:id',  patientController.remove);
+router.get   ('/patients',           patientController.list);
+router.post  ('/patients',           patientController.create);
+router.put   ('/patients/:id',       patientController.update);
+router.delete('/patients/:id',       patientController.remove);
+
+// Required Tasks (Obrigações)
+router.get   ('/required-tasks',     requiredTaskController.list);
+router.post  ('/required-tasks',     requiredTaskController.create);
+router.put   ('/required-tasks/:id', requiredTaskController.update);
+router.delete('/required-tasks/:id', requiredTaskController.remove);
 
 export default router;

@@ -27,8 +27,10 @@ model Surgery {
   type       String
   patient    String
   date       DateTime
+  notes      String?
   residentId String
   createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   resident Resident @relation(fields: [residentId], references: [id], onDelete: Cascade)
 
@@ -50,4 +52,17 @@ model Patient {
 
   @@index([residentId])
   @@map("patients")
+}
+
+/// Tarefas obrigatórias por nível de residência (R1 = 1, R2 = 2)
+model RequiredTask {
+  id        String   @id @default(cuid())
+  name      String
+  level     Int      // 1 = R1, 2 = R2
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name, level])
+  @@index([level])
+  @@map("required_tasks")
 }
